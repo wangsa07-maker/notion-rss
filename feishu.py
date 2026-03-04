@@ -54,16 +54,16 @@ def send_feed_summary_to_feishu(feed_items: list, content_max_length: int = 500)
 
     today = datetime.now().strftime("%Y-%m-%d")
 
-    lines = [f"## 📰 RSS Feed 摘要 ({today})", ""]
+    lines = [f"📰 RSS Feed 摘要 ({today})", ""]
 
     for item in feed_items:
         title = item.get("title", "无标题")
         link = item.get("link", "")
 
         if link:
-            lines.append(f"### 🔗 [{title}]({link})")
+            lines.append(f"🔗 [{title}]({link})")
         else:
-            lines.append(f"### {title}")
+            lines.append(f"{title}")
 
         lines.append("")
 
