@@ -2,6 +2,7 @@ import logging
 import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime
 
 import feedparser
 from dotenv import load_dotenv
@@ -16,14 +17,12 @@ _MAX_FETCH_WORKERS = 5
 
 
 def _parse_struct_time_to_timestamp(st) -> float:
-    """Convert struct_time to timestamp."""
     if st:
         return time.mktime(st)
     return 0.0
 
 
 def _extract_content(item) -> str:
-    """Safely extract content from a feed item."""
     content_list = item.get("content", [])
     if content_list:
         return content_list[0].get("value", "") or item.get("summary", "")
@@ -35,7 +34,6 @@ def _get_new_feed_items_from(
     existing_titles: set[str],
     existing_links: set[str],
 ) -> list[dict]:
-    """Fetch and filter new items from a single RSS feed."""
     try:
         rss = feedparser.parse(feed_url)
     except Exception as e:
@@ -64,9 +62,9 @@ def _get_new_feed_items_from(
 
         if title in existing_titles or link in existing_links:
             continue
-        
+
         published_date = datetime(*pub_date[:6]).strftime("%Y-%m-%d")
-        
+
         new_items.append({
             "title": title,
             "link": link,
@@ -79,7 +77,6 @@ def _get_new_feed_items_from(
 
 
 def get_new_feed_items() -> list[dict]:
-    """Fetch new items from all enabled RSS feeds concurrently."""
     feeds = get_feed_urls_from_notion()
     existing_titles, existing_links = get_existing_items_since(days=5)
 
