@@ -64,12 +64,15 @@ def _get_new_feed_items_from(
 
         if title in existing_titles or link in existing_links:
             continue
-
+        
+        published_date = datetime(*pub_date[:6]).strftime("%Y-%m-%d")
+        
         new_items.append({
             "title": title,
             "link": link,
             "content": _extract_content(item),
             "published_parsed": pub_date,
+            "published_date": published_date,
         })
 
     return new_items
