@@ -2,7 +2,7 @@ name: News RSS Feed
 
 on:
   schedule:
-    - cron: '12 5 * * *'
+    - cron: '0 1 * * *'
   workflow_dispatch:
 
 jobs:
